@@ -17,6 +17,7 @@ class AccueilController extends AbstractController
         return new Response("
             <body>
                 <p>Bienvenu sur notre Site Symfony !</p>
+                <a></a>
             </body>
             ");
     }
