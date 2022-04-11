@@ -36,12 +36,12 @@ class User
     #[ORM\Column(type: 'boolean')]
     private $is_super_admin;
 
-    #[ORM\ManyToMany(targetEntity: ShoppingCart::class, mappedBy: 'id_user')]
-    private $id_product;
+    #[ORM\OneToMany(mappedBy: 'id_user', targetEntity: ShoppingCart::class)]
+    private $shoppingCarts;
 
     public function __construct()
     {
-        $this->id_product = new ArrayCollection();
+        $this->shoppingCarts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -136,27 +136,32 @@ class User
     /**
      * @return Collection<int, ShoppingCart>
      */
-    public function getIdProduct(): Collection
+    public function getShoppingCarts(): Collection
     {
-        return $this->id_product;
+        return $this->shoppingCarts;
     }
 
-    public function addIdProduct(ShoppingCart $idProduct): self
+    public function addShoppingCart(ShoppingCart $shoppingCart): self
     {
-        if (!$this->id_product->contains($idProduct)) {
-            $this->id_product[] = $idProduct;
-            $idProduct->addIdUser($this);
+        if (!$this->shoppingCarts->contains($shoppingCart)) {
+            $this->shoppingCarts[] = $shoppingCart;
+            $shoppingCart->setIdUser($this);
         }
 
         return $this;
     }
 
-    public function removeIdProduct(ShoppingCart $idProduct): self
+    public function removeShoppingCart(ShoppingCart $shoppingCart): self
     {
-        if ($this->id_product->removeElement($idProduct)) {
-            $idProduct->removeIdUser($this);
+        if ($this->shoppingCarts->removeElement($shoppingCart)) {
+            // set the owning side to null (unless already changed)
+            if ($shoppingCart->getIdUser() === $this) {
+                $shoppingCart->setIdUser(null);
+            }
         }
 
         return $this;
     }
+
+
 }

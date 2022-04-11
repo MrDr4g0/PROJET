@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\ShoppingCartRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ShoppingCartRepository::class)]
@@ -15,70 +13,42 @@ class ShoppingCart
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\ManyToMany(targetEntity: user::class, inversedBy: 'id_product')]
+    #[ORM\ManyToOne(targetEntity: user::class, inversedBy: 'shoppingCarts')]
+    #[ORM\JoinColumn(nullable: false)]
     private $id_user;
 
-    #[ORM\ManyToMany(targetEntity: product::class, inversedBy: 'shoppingCarts')]
+    #[ORM\ManyToOne(targetEntity: product::class, inversedBy: 'shoppingCarts')]
+    #[ORM\JoinColumn(nullable: false)]
     private $id_product;
 
     #[ORM\Column(type: 'integer')]
     private $nb_product;
-
-    public function __construct()
-    {
-        $this->id_user = new ArrayCollection();
-        $this->id_product = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return Collection<int, user>
-     */
-    public function getIdUser(): Collection
+    public function getIdUser(): ?user
     {
         return $this->id_user;
     }
 
-    public function addIdUser(user $idUser): self
+    public function setIdUser(?user $id_user): self
     {
-        if (!$this->id_user->contains($idUser)) {
-            $this->id_user[] = $idUser;
-        }
+        $this->id_user = $id_user;
 
         return $this;
     }
 
-    public function removeIdUser(user $idUser): self
-    {
-        $this->id_user->removeElement($idUser);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, product>
-     */
-    public function getIdProduct(): Collection
+    public function getIdProduct(): ?product
     {
         return $this->id_product;
     }
 
-    public function addIdProduct(product $idProduct): self
+    public function setIdProduct(?product $id_product): self
     {
-        if (!$this->id_product->contains($idProduct)) {
-            $this->id_product[] = $idProduct;
-        }
-
-        return $this;
-    }
-
-    public function removeIdProduct(product $idProduct): self
-    {
-        $this->id_product->removeElement($idProduct);
+        $this->id_product = $id_product;
 
         return $this;
     }

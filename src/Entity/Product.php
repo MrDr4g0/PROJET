@@ -24,7 +24,7 @@ class Product
     #[ORM\Column(type: 'integer')]
     private $stock;
 
-    #[ORM\ManyToMany(targetEntity: ShoppingCart::class, mappedBy: 'id_product')]
+    #[ORM\OneToMany(mappedBy: 'id_product', targetEntity: ShoppingCart::class)]
     private $shoppingCarts;
 
     public function __construct()
@@ -85,7 +85,7 @@ class Product
     {
         if (!$this->shoppingCarts->contains($shoppingCart)) {
             $this->shoppingCarts[] = $shoppingCart;
-            $shoppingCart->addIdProduct($this);
+            $shoppingCart->setIdProduct($this);
         }
 
         return $this;
@@ -94,9 +94,13 @@ class Product
     public function removeShoppingCart(ShoppingCart $shoppingCart): self
     {
         if ($this->shoppingCarts->removeElement($shoppingCart)) {
-            $shoppingCart->removeIdProduct($this);
+            // set the owning side to null (unless already changed)
+            if ($shoppingCart->getIdProduct() === $this) {
+                $shoppingCart->setIdProduct(null);
+            }
         }
 
         return $this;
     }
+
 }
