@@ -37,7 +37,7 @@ class AccueilController extends AbstractController
             ->setPassword("nimdas")
             ->setName("Admin")
             ->setFirstName("Bob")
-            ->setBirthDate("11/04/2022")
+            ->setBirthDate(date_create("11/04/2022"))
             ->setIsAdmin(false)
             ->setIsSuperAdmin(true)
             ;
