@@ -14,7 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
 class AccueilController extends AbstractController
 {
     /**
-     * @Route("", name = "accueil")
+     * @Route("/accueil", name = "accueil")
      */
     public function index(): Response
     {
@@ -40,7 +40,7 @@ class AccueilController extends AbstractController
             ->setPassword("nimdas")
             ->setName("Admin")
             ->setFirstName("Bob")
-            ->setBirthDate("11/04/2022")
+            ->setBirthDate(date_create("11/04/2022"))
             ->setIsAdmin(false)
             ->setIsSuperAdmin(true)
             ;
