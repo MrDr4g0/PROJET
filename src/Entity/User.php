@@ -70,5 +70,4 @@ class User
      */
     private $isSuperAdmin;
 
-
 }
