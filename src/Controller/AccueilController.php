@@ -24,9 +24,6 @@ class AccueilController extends AbstractController
                 <a></a>
             </body>
             ");
-
-
-
     }
 
     /**
@@ -75,13 +72,11 @@ class AccueilController extends AbstractController
         $em->flush();
 
         return $this->redirectToRoute('sandbox_doctrine_view',['id' => $id]);
-
     }
 
     /**
      * @Route("/effacerendur", name = "_effacerendur")
      */
-
     public function effacerendurAction(ManagerRegistry $doctrine): Response{
         $id = 3;
         $em = $doctrine->getManager();
