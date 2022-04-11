@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -77,7 +79,11 @@ class User
      */
     private $is_super_admin;
 
-    #[ORM\OneToMany(mappedBy: 'id_user', targetEntity: ShoppingCart::class)]
+    /**
+     * @var Collection
+     * @ORM\OneToMany(targetEntity=ShoppingCart::class,mappedBy="id_user")
+     */
+
     private $shoppingCarts;
 
     public function __construct()
