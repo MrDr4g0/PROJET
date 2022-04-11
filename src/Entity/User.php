@@ -7,41 +7,82 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: UserRepository::class)]
+/**
+ * @ORM\Table (name="im22_user")
+ * @ORM\Entity(repositoryClass=UserRepository::class)
+ */
+
 class User
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    /**
+     * @ORM\Column(name="id",type="integer"
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="Auto")
+     */
+
     private $id;
 
-    #[ORM\Column(type: 'string', length: 100)]
+    /**
+     *
+     * @ORM\Column(name="login",type"string",length=100)
+     * @Assert\NotBlank(message = "un login est obligatoire")
+     * @Assert\Length(max = 20)
+     */
     private $login;
 
-    #[ORM\Column(type: 'string', length: 100)]
+    /**
+     *
+     * @ORM\Column(name="password",type"string",length=100)
+     * @Assert\NotBlank(message = "un password est obligatoire")
+     * @Assert\Length(max = 20)
+     */
+
     private $password;
 
-    #[ORM\Column(type: 'string', length: 100)]
+
+    /**
+     *
+     * @ORM\Column(name="name",type"string",length=100)
+     * @Assert\NotBlank(message = "un nom est obligatoire")
+     * @Assert\Length(max = 20)
+     */
     private $name;
 
-    #[ORM\Column(type: 'string', length: 100)]
+
+    /**
+     *
+     * @ORM\Column(name="first_name",type"string",length=100)
+     * @Assert\NotBlank(message = "un prénom est obligatoire")
+     * @Assert\Length(max = 20)
+     */
     private $first_name;
 
-    #[ORM\Column(type: 'date')]
+
+    /**
+     *
+     * @ORM\Column(name="date",type"date")
+     * @Assert\NotBlank(message = "une date est obligatoire")
+     */
     private $birth_date;
 
-    #[ORM\Column(type: 'boolean')]
+    /**
+     * @ORM\Column(name="is_admin",type="boolean" , options={"default"=false})
+     * @Assert\Type(type = "bool", message = "{{ value }} n'est pas un {{ type }}")
+     */
     private $is_admin;
 
-    #[ORM\Column(type: 'boolean')]
+    /**
+     * @ORM\Column(name="is_super_admin",type="boolean" , options={"default"=false})
+     * @Assert\Type(type = "bool", message = "{{ value }} n'est pas un {{ type }}")
+     */
     private $is_super_admin;
 
-    #[ORM\ManyToMany(targetEntity: ShoppingCart::class, mappedBy: 'id_user')]
-    private $id_product;
+    #[ORM\OneToMany(mappedBy: 'id_user', targetEntity: ShoppingCart::class)]
+    private $shoppingCarts;
 
     public function __construct()
     {
-        $this->id_product = new ArrayCollection();
+        $this->shoppingCarts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -136,27 +177,32 @@ class User
     /**
      * @return Collection<int, ShoppingCart>
      */
-    public function getIdProduct(): Collection
+    public function getShoppingCarts(): Collection
     {
-        return $this->id_product;
+        return $this->shoppingCarts;
     }
 
-    public function addIdProduct(ShoppingCart $idProduct): self
+    public function addShoppingCart(ShoppingCart $shoppingCart): self
     {
-        if (!$this->id_product->contains($idProduct)) {
-            $this->id_product[] = $idProduct;
-            $idProduct->addIdUser($this);
+        if (!$this->shoppingCarts->contains($shoppingCart)) {
+            $this->shoppingCarts[] = $shoppingCart;
+            $shoppingCart->setIdUser($this);
         }
 
         return $this;
     }
 
-    public function removeIdProduct(ShoppingCart $idProduct): self
+    public function removeShoppingCart(ShoppingCart $shoppingCart): self
     {
-        if ($this->id_product->removeElement($idProduct)) {
-            $idProduct->removeIdUser($this);
+        if ($this->shoppingCarts->removeElement($shoppingCart)) {
+            // set the owning side to null (unless already changed)
+            if ($shoppingCart->getIdUser() === $this) {
+                $shoppingCart->setIdUser(null);
+            }
         }
 
         return $this;
     }
+
+
 }
