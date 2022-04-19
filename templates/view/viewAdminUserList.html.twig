@@ -8,6 +8,14 @@
 {% endblock %}
 
 {% block vue %}
+
+    <style>
+        table, th, td {
+            border: 1px solid;
+        }
+    </style>
+
+
     <table>
         <tr><th>id</th><th>login</th><th>password</th><th>name</th><th>first name</th><th>date of birth</th><th>admin</th><th>super-admin</th><th>delete</th></tr>
         {% for user in users %}
@@ -20,8 +28,8 @@
                 <td>{{ user.name }}</td>
                 <td>{{ user.firstName }}</td>
                 <td>{{ user.birthDate|format_date }}</td>
-                <td>{{ user.is_admin }}</td>
-                <td>{{ user.is_super_admin }}</td>
+                <td>{{ user.isAdmin }}</td>
+                <td>{{ user.isSuperAdmin }}</td>
                 <td>delete</td>
             </tr>
         {% endfor %}
