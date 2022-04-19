@@ -1,0 +1,29 @@
+{% extends 'layout/layoutPage.html.twig' %}
+
+{% block menu %}
+
+    {% set url = path('admin_accueil',{'id' : id}) %}
+    <a href="{{ url }}"> -> retour à l'accueil <- </a>
+
+{% endblock %}
+
+{% block vue %}
+    <table>
+        <tr><th>id</th><th>login</th><th>password</th><th>name</th><th>first name</th><th>date of birth</th><th>admin</th><th>super-admin</th><th>delete</th></tr>
+        {% for user in users %}
+            <tr>
+                {#  {% set urlView = path('admin_view',{'id' : user.id}) %}
+                {% set urlDelete = path('admin_delete',{'id' : user.id}) %} #}
+                <td>{{ user.id }}</td>
+                <td>{{ user.login }}</td>
+                <td>{{ user.password|md5 }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.firstName }}</td>
+                <td>{{ user.birthDate|format_date }}</td>
+                <td>{{ user.is_admin }}</td>
+                <td>{{ user.is_super_admin }}</td>
+                <td>delete</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

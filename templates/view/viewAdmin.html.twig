@@ -1,0 +1,34 @@
+{% extends 'layout/layoutPage.html.twig' %}
+
+{#
+Pas de modification particulière dans cette vue, on modifie le template parent donc celui ci n'est pas impacté
+#}
+
+{% block title %}{{ parent() }} Hub {% endblock %}
+
+{% block accueil %}
+    <h1> Bienvenue {{ firstname }} {{ name }} ! Tu es un {{ type }} </h1>
+{% endblock %}
+
+{% block menu %}
+    <h2>Panier :</h2>
+    <ul>
+        {% for panier in paniers %}
+            <li>{{ panier }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2> Liens Administrateur :</h2>
+
+    {% set url = path('admin_user_list',{'id' : id}) %}
+    <p>
+    <a href="{{ url }}"> -> Gestion des utilisateurs <- </a>
+    <br>
+    <a href=""> -> Ajouter un produit dans la base de donnée <- </a>
+    <br>
+    <a href="https://fr.wikipedia.org/wiki/The Truman Show">https://fr.wikipedia.org/wiki/The Truman Show</a>
+    </p>
+{% endblock %}
+
+{% block vue %}
+{% endblock %}

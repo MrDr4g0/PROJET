@@ -17,34 +17,47 @@ class AdminController extends AbstractController
 {
 
     /**
-     * @Route("/index", name = "_index")
-     */
-    public function index(): Response
-    {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/Admin/AdminController.php',
-        ]);
-    }
-
-    /**
      * @Route("/accueil/{id}", name = "_accueil")
      */
     public function accueilAdmin(ManagerRegistry $doctrine,$id): Response {
 
         $em = $doctrine->getManager();
 
-        $filmRepository = $em->getRepository('App:User');
+        $userRepository = $em->getRepository('App:User');
 
-        $user = $filmRepository->find($id);
+        $user = $userRepository->find($id);
 
         $args = array(
             'type' => 'Admin',
+            'id' => $user->getId(),
             'name' => $user->getName(),
             'firstname' => $user->getFirstName(),
+            'birth_date' => $user->getBirthDate(),
+            'paniers' => $user->getIdShoppingCart(),
         );
 
-        return $this->render('layout/accueil.html.twig', $args);
+        return $this->render('view/viewAdmin.html.twig', $args);
 
     }
+
+    /**
+     * @Route ("/user-list/{id}" , name = "_user_list")
+     */
+
+    public function viewUserList(ManagerRegistry $doctrine,$id): Response {
+
+        $em = $doctrine->getManager();
+        $userRepository = $em->getRepository('App:User');
+
+        $user = $userRepository->find($id);
+
+        $users = $userRepository->findAll();
+        $args = array(
+            'id' => $user->getId(),
+            'users' => $users,
+        );
+        return $this->render("view/viewAdminUserList.html.twig",$args);
+    }
+
+
 }
