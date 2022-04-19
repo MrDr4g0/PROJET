@@ -16,13 +16,10 @@ use Symfony\Component\Validator\Validator\ValidatorInterface; //validator
 class NonUserFormController extends AbstractController
 {
     /**
-     * @Route("/non_user/accueil", name = "nonUser_accueil")
+     * @Route("/nonUser/accueil", name = "nonUser_accueil")
      */
-    public function index(): Response
+    public function accueil(): Response
     {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/NonUser/NonUserFormController.php',
-        ]);
+
     }
 }
