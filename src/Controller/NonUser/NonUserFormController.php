@@ -12,6 +12,8 @@ use App\Form\UserFormType;
 use App\Entity\User; //film
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Validator\ValidatorInterface; //validator
+use Symfony\Component\Form\FormInterface;
+
 
 class NonUserFormController extends AbstractController
 {
@@ -20,7 +22,7 @@ class NonUserFormController extends AbstractController
      */
     public function accueil(Request $request): Response
     {
-        $form = $this->createForm(UserType::class);
+        $form = $this->createForm(UserFormType::class);
         $form->add('Send', SubmitType::class, ['label' => 'Identification']);
         $form->handleRequest($request);
 
@@ -29,6 +31,6 @@ class NonUserFormController extends AbstractController
             return $this->redirectToRoute('accueil');
         }
         else
-            return
+            return new Response ('<body> test </body>');
     }
 }

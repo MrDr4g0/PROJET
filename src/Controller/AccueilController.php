@@ -23,12 +23,10 @@ class AccueilController extends AbstractController
         $em = $doctrine->getManager();
         $UserRepository = $em->getRepository('App:User');
         // on met en dur l'id de l'utilisateur recherché
-        $user = $UserRepository->find(2);
+        $user = $UserRepository->find(0);
 
         if (is_null($user))
-            return $this->redirectToRoute('nonUser_accueil',array(
-                'id' => $user->getId(),
-            ));
+            return $this->redirectToRoute('nonUser_accueil');
         else if ($user->getIsAdmin())
             return $this->redirectToRoute('admin_accueil',array(
                 'id' => $user->getId(),
