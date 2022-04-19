@@ -18,8 +18,17 @@ class NonUserFormController extends AbstractController
     /**
      * @Route("/nonUser/accueil", name = "nonUser_accueil")
      */
-    public function accueil(): Response
+    public function accueil(Request $request): Response
     {
+        $form = $this->createForm(UserType::class);
+        $form->add('Send', SubmitType::class, ['label' => 'Identification']);
+        $form->handleRequest($request);
 
+        if($form->isSubmitted() && $form->isValid())
+        {
+            return $this->redirectToRoute('accueil');
+        }
+        else
+            return
     }
 }

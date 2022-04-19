@@ -16,7 +16,7 @@ class AccueilController extends AbstractController
 {
     // cette action scanne l'utilisateur et lui renvoie la vue avec son rôle
     /**
-     * @Route("", name = "")
+     * @Route("", name = "accueil")
      */
     public function accueil(ManagerRegistry $doctrine): Response
     {
