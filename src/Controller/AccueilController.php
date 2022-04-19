@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use ContainerAjxZwdo\getConsole_ErrorListenerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,80 +14,24 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class AccueilController extends AbstractController
 {
+    // cette action scanne l'utilisateur et lui renvoie la vue avec son rôle
     /**
-     * @Route("/accueil", name = "accueil")
+     * @Route("", name = "")
      */
-    public function index(): Response
+    public function accueil(ManagerRegistry $doctrine): Response
     {
-        return new Response("
-            <body>
-                <p>Bienvenu sur notre Site Symfony !</p>
-                <a></a>
-            </body>
-            ");
-    }
-
-    /**
-     * @Route("/ajouterendur",  name = "_ajouterendur")
-     */
-    public function ajouterendurAction(ManagerRegistry $doctrine): Response{
         $em = $doctrine->getManager();
+        $UserRepository = $em->getRepository('App:User');
+        // on met en dur l'id de l'utilisateur recherché
+        $user = $UserRepository->find(2);
 
-        $user = new User();
-        $user -> setLogin("simon")
-            ->setPassword("nomis")
-            ->setName("Gepalareff")
-            ->setFirstName("Simon")
-            ->setBirthDate(date_create("1976/04/01"))
-            ->setIsAdmin(false)
-            ->setIsSuperAdmin(false)
-            ;
-        dump($user);
-        $em->persist($user);
-        $em->flush();
-        dump($user);
-
-        return $this->redirectToRoute('accueil');
-    }
-
-    /**
-     * @Route("/modifierendur",  name = "_modifierendur")
-     */
-    public function modifierendurAction(ManagerRegistry $doctrine): Response{
-
-        $id = 1;
-
-        $em = $doctrine->getManager();
-
-        $userRepository = $em->getRepository('App:User');
-
-        $user = $userRepository>find($id);
-
-
-        if(!(is_null($id))){
-            $user->setQuantite($user->getQuantite()+10);
-            $user->setPrix(15.98);
-        }
-
-
-        $em->flush();
-
-        return $this->redirectToRoute('sandbox_doctrine_view',['id' => $id]);
-    }
-
-    /**
-     * @Route("/effacerendur", name = "_effacerendur")
-     */
-    public function effacerendurAction(ManagerRegistry $doctrine): Response{
-        $id = 3;
-        $em = $doctrine->getManager();
-        $userRepository = $em->getRepository('App:User');
-
-        $user =$userRepository->find($id);
-
-        $em->remove($user);
-        $em->flush();
-
-        return $this->redirectToRoute('accueil');
+        if (is_null($user))
+            return $this->redirectToRoute('nonUser_accueil');
+        else if ($user->getIsAdmin())
+            return $this->redirectToRoute('admin_accueil');
+        else if ($user->getIsSuperAdmin())
+            return $this->redirectToRoute('superAdmin_accueil');
+        else
+            return $this->redirectToRoute('user_accueil');
     }
 }

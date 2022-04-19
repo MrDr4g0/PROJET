@@ -15,7 +15,9 @@ use Symfony\Component\Validator\Validator\ValidatorInterface; //validator
 
 class NonUserFormController extends AbstractController
 {
-    #[Route('/non/user/non/user/form', name: 'app_non_user_non_user_form')]
+    /**
+     * @Route("/non_user/accueil", name = "nonUser_accueil")
+     */
     public function index(): Response
     {
         return $this->json([
