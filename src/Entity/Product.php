@@ -25,11 +25,11 @@ class Product
     private $stock;
 
     #[ORM\OneToMany(mappedBy: 'id_product', targetEntity: ShoppingCart::class)]
-    private $shoppingCarts;
+    private $id_shopping_cart;
 
     public function __construct()
     {
-        $this->shoppingCarts = new ArrayCollection();
+        $this->id_shopping_cart = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -76,31 +76,30 @@ class Product
     /**
      * @return Collection<int, ShoppingCart>
      */
-    public function getShoppingCarts(): Collection
+    public function getIdShoppingCart(): Collection
     {
-        return $this->shoppingCarts;
+        return $this->id_shopping_cart;
     }
 
-    public function addShoppingCart(ShoppingCart $shoppingCart): self
+    public function addIdShoppingCart(ShoppingCart $idShoppingCart): self
     {
-        if (!$this->shoppingCarts->contains($shoppingCart)) {
-            $this->shoppingCarts[] = $shoppingCart;
-            $shoppingCart->setIdProduct($this);
+        if (!$this->id_shopping_cart->contains($idShoppingCart)) {
+            $this->id_shopping_cart[] = $idShoppingCart;
+            $idShoppingCart->setIdProduct($this);
         }
 
         return $this;
     }
 
-    public function removeShoppingCart(ShoppingCart $shoppingCart): self
+    public function removeIdShoppingCart(ShoppingCart $idShoppingCart): self
     {
-        if ($this->shoppingCarts->removeElement($shoppingCart)) {
+        if ($this->id_shopping_cart->removeElement($idShoppingCart)) {
             // set the owning side to null (unless already changed)
-            if ($shoppingCart->getIdProduct() === $this) {
-                $shoppingCart->setIdProduct(null);
+            if ($idShoppingCart->getIdProduct() === $this) {
+                $idShoppingCart->setIdProduct(null);
             }
         }
 
         return $this;
     }
-
 }

@@ -7,82 +7,41 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table (name="im22_user")
- * @ORM\Entity(repositoryClass=UserRepository::class)
- */
-
+#[ORM\Entity(repositoryClass: UserRepository::class)]
 class User
 {
-    /**
-     * @ORM\Column(name="id",type="integer"
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="Auto")
-     */
-
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     *
-     * @ORM\Column(name="login",type"string",length=100)
-     * @Assert\NotBlank(message = "un login est obligatoire")
-     * @Assert\Length(max = 20)
-     */
+    #[ORM\Column(type: 'string', length: 100)]
     private $login;
 
-    /**
-     *
-     * @ORM\Column(name="password",type"string",length=100)
-     * @Assert\NotBlank(message = "un password est obligatoire")
-     * @Assert\Length(max = 20)
-     */
-
+    #[ORM\Column(type: 'string', length: 100)]
     private $password;
 
-
-    /**
-     *
-     * @ORM\Column(name="name",type"string",length=100)
-     * @Assert\NotBlank(message = "un nom est obligatoire")
-     * @Assert\Length(max = 20)
-     */
+    #[ORM\Column(type: 'string', length: 100)]
     private $name;
 
-
-    /**
-     *
-     * @ORM\Column(name="first_name",type"string",length=100)
-     * @Assert\NotBlank(message = "un prénom est obligatoire")
-     * @Assert\Length(max = 20)
-     */
+    #[ORM\Column(type: 'string', length: 100)]
     private $first_name;
 
-
-    /**
-     *
-     * @ORM\Column(name="date",type"date")
-     * @Assert\NotBlank(message = "une date est obligatoire")
-     */
+    #[ORM\Column(type: 'date')]
     private $birth_date;
 
-    /**
-     * @ORM\Column(name="is_admin",type="boolean" , options={"default"=false})
-     * @Assert\Type(type = "bool", message = "{{ value }} n'est pas un {{ type }}")
-     */
+    #[ORM\Column(type: 'boolean')]
     private $is_admin;
 
-    /**
-     * @ORM\Column(name="is_super_admin",type="boolean" , options={"default"=false})
-     * @Assert\Type(type = "bool", message = "{{ value }} n'est pas un {{ type }}")
-     */
+    #[ORM\Column(type: 'boolean')]
     private $is_super_admin;
 
-    #[ORM\OneToMany(mappedBy: 'id_user', targetEntity: ShoppingCart::class)]
-    private $shoppingCarts;
+    #[ORM\OneToMany(mappedBy: 'id_user', targetEntity: ShoppingCart::class, orphanRemoval: true)]
+    private $id_shopping_cart;
 
     public function __construct()
     {
-        $this->shoppingCarts = new ArrayCollection();
+        $this->id_shopping_cart = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -177,32 +136,30 @@ class User
     /**
      * @return Collection<int, ShoppingCart>
      */
-    public function getShoppingCarts(): Collection
+    public function getIdShoppingCart(): Collection
     {
-        return $this->shoppingCarts;
+        return $this->id_shopping_cart;
     }
 
-    public function addShoppingCart(ShoppingCart $shoppingCart): self
+    public function addIdShoppingCart(ShoppingCart $idShoppingCart): self
     {
-        if (!$this->shoppingCarts->contains($shoppingCart)) {
-            $this->shoppingCarts[] = $shoppingCart;
-            $shoppingCart->setIdUser($this);
+        if (!$this->id_shopping_cart->contains($idShoppingCart)) {
+            $this->id_shopping_cart[] = $idShoppingCart;
+            $idShoppingCart->setIdUser($this);
         }
 
         return $this;
     }
 
-    public function removeShoppingCart(ShoppingCart $shoppingCart): self
+    public function removeIdShoppingCart(ShoppingCart $idShoppingCart): self
     {
-        if ($this->shoppingCarts->removeElement($shoppingCart)) {
+        if ($this->id_shopping_cart->removeElement($idShoppingCart)) {
             // set the owning side to null (unless already changed)
-            if ($shoppingCart->getIdUser() === $this) {
-                $shoppingCart->setIdUser(null);
+            if ($idShoppingCart->getIdUser() === $this) {
+                $idShoppingCart->setIdUser(null);
             }
         }
 
         return $this;
     }
-
-
 }

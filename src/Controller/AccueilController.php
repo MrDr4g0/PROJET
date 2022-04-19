@@ -33,13 +33,13 @@ class AccueilController extends AbstractController
         $em = $doctrine->getManager();
 
         $user = new User();
-        $user -> setLogin("sadmin")
-            ->setPassword("nimdas")
-            ->setName("Admin")
-            ->setFirstName("Bob")
-            ->setBirthDate(date_create("11/04/2022"))
+        $user -> setLogin("simon")
+            ->setPassword("nomis")
+            ->setName("Gepalareff")
+            ->setFirstName("Simon")
+            ->setBirthDate(date_create("1976/04/01"))
             ->setIsAdmin(false)
-            ->setIsSuperAdmin(true)
+            ->setIsSuperAdmin(false)
             ;
         dump($user);
         $em->persist($user);

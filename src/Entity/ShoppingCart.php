@@ -13,11 +13,11 @@ class ShoppingCart
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\ManyToOne(targetEntity: user::class, inversedBy: 'shoppingCarts')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'id_shopping_cart')]
     #[ORM\JoinColumn(nullable: false)]
     private $id_user;
 
-    #[ORM\ManyToOne(targetEntity: product::class, inversedBy: 'shoppingCarts')]
+    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'id_shopping_cart')]
     #[ORM\JoinColumn(nullable: false)]
     private $id_product;
 
@@ -29,24 +29,24 @@ class ShoppingCart
         return $this->id;
     }
 
-    public function getIdUser(): ?user
+    public function getIdUser(): ?User
     {
         return $this->id_user;
     }
 
-    public function setIdUser(?user $id_user): self
+    public function setIdUser(?User $id_user): self
     {
         $this->id_user = $id_user;
 
         return $this;
     }
 
-    public function getIdProduct(): ?product
+    public function getIdProduct(): ?Product
     {
         return $this->id_product;
     }
 
-    public function setIdProduct(?product $id_product): self
+    public function setIdProduct(?Product $id_product): self
     {
         $this->id_product = $id_product;
 
