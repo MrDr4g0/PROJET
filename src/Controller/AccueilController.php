@@ -26,12 +26,20 @@ class AccueilController extends AbstractController
         $user = $UserRepository->find(2);
 
         if (is_null($user))
-            return $this->redirectToRoute('nonUser_accueil');
+            return $this->redirectToRoute('nonUser_accueil',array(
+                'id' => $user->getId(),
+            ));
         else if ($user->getIsAdmin())
-            return $this->redirectToRoute('admin_accueil');
+            return $this->redirectToRoute('admin_accueil',array(
+                'id' => $user->getId(),
+            ));
         else if ($user->getIsSuperAdmin())
-            return $this->redirectToRoute('superAdmin_accueil');
+            return $this->redirectToRoute('superAdmin_accueil',array(
+                'id' => $user->getId(),
+            ));
         else
-            return $this->redirectToRoute('user_accueil');
+            return $this->redirectToRoute('user_accueil',array(
+                'id' => $user->getId(),
+            ));
     }
 }
