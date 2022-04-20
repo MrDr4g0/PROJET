@@ -64,7 +64,9 @@ class NonUserFormController extends AbstractController
 
         if($form->isSubmitted()&& $form->isValid())
         {
-            $user = $userRepository->findOneBy($form->getData());
+            // recherche dans la table un utilisateur avec login et le password réuni
+            // pour vérifier que l'utilisateur existe bien
+            $user = $userRepository->findOneBy([$form->getData()]);
             if(is_null($user))
                 $this->addFlash('info', 'Authentification incorrecte');
             else
