@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Product;
 use ContainerAjxZwdo\getConsole_ErrorListenerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -62,6 +63,26 @@ class AccueilController extends AbstractController
         $em->persist($user);
         $em->flush();
         dump($user);
+
+        return $this->redirectToRoute('accueil');
+    }
+
+    /**
+     * @Route("/ajouterendurProduct",  name = "_ajouterendur")
+     */
+
+    public function ajouterendurProduct(ManagerRegistry $doctrine): Response{
+        $em = $doctrine->getManager();
+
+        $product = new Product();
+        $product ->setName("Cahier - A4 - Petits Carreaux")
+            ->setPrice(5.50)
+            ->setStock(52)
+        ;
+        dump($product);
+        $em->persist($product);
+        $em->flush();
+        dump($product);
 
         return $this->redirectToRoute('accueil');
     }
