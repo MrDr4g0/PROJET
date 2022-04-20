@@ -42,7 +42,7 @@ class User
     public function __construct()
     {
         $this->is_admin = false;
-        $this->is_super_admin= false;
+        $this->is_super_admin = false;
         $this->id_shopping_cart = new ArrayCollection();
     }
 
