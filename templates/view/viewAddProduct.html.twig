@@ -1,0 +1,25 @@
+{% extends 'layout/layoutPage.html.twig' %}
+
+{% block title %}{{ parent() }} Formulaire d'ajout de produit {% endblock %}
+
+
+{% block menu %}
+
+    {% set url = path('admin_accueil',{'id' : id}) %}
+    <ul>
+        <li><a href="{{ url }}"> Retour à l'accueil </a></li>
+    </ul>
+
+{% endblock %}
+
+{% block vue %}
+
+    {{ form_start(productForm) }}
+
+    {{ form_errors(productForm) }}
+
+    {{ form_rest(productForm) }}
+
+    {{ form_end(productForm) }}
+
+{% endblock %}

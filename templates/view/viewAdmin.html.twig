@@ -20,10 +20,13 @@ Pas de modification particulière dans cette vue, on modifie le template parent 
 
     <h2> Liens Administrateur :</h2>
 
-    {% set url = path('admin_user_list',{'id' : id}) %}
+    {% set urlUserList = path('admin_user_list',{'id' : id}) %}
+    {% set urlProductList = path('admin_product_list',{'id' : id}) %}
+    {% set urlAddProduct = path('admin_add_product',{'id' : id}) %}
     <ul>
-        <li><a href="{{ url }}"> Gestion des utilisateurs </a></li>
-        <li><a href=""> Ajouter un produit dans la base de donnée </a></li>
+        <li><a href="{{ urlUserList }}"> Gestion des utilisateurs </a></li>
+        <li><a href="{{ urlProductList }}">Liste des produits disponibles</a></li>
+        <li><a href="{{ urlAddProduct }}"> Ajouter un produit dans la base de donnée </a></li>
         <li><a href="https://fr.wikipedia.org/wiki/The Truman Show"> https://fr.wikipedia.org/wiki/The Truman Show </a></li>
     </ul>
 {% endblock %}

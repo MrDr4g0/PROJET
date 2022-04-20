@@ -2,8 +2,13 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Product;
+use App\Form\ProductFormType;
+use App\Form\UserFormType;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -45,7 +50,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route ("/user-list/{id}" , name = "_user_list",requirements = { "id" : "[0-9]\d*"})
+     * @Route ("/userList/{id}" , name = "_user_list",requirements = { "id" : "[0-9]\d*"})
      */
 
     public function viewUserList(ManagerRegistry $doctrine,int $id): Response {
@@ -64,7 +69,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route ("/user-delete/{id_current}/{id_delete}", name = "_delete")
+     * @Route ("/userDelete/{id_current}/{id_delete}", name = "_delete")
      */
 
     public function deleteUser(ManagerRegistry $doctrine,int $id_current,int $id_delete): Response {
@@ -101,5 +106,54 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('admin_user_list',['id' => $id_current]);
     }
 
+    /**
+     * @Route ("/productList/{id}" , name = "_product_list",requirements = { "id" : "[0-9]\d*"})
+     */
 
+    public function viewProductList(ManagerRegistry $doctrine,int $id): Response {
+
+        $em = $doctrine->getManager();
+        $productRepository = $em->getRepository('App:Product');
+
+        $userRepository = $em->getRepository('App:User');
+        $user = $userRepository->find($id);
+
+        $products = $productRepository->findAll();
+        $args = array(
+            'id' => $user->getId(),
+            'products' => $products,
+        );
+        return $this->render("view/viewAdminProductList.html.twig",$args);
+    }
+
+    /**
+     * @Route ("/ajoutProduit/{id}" , name="_add_product",requirements = { "id" : "[0-9]\d*" } )
+     */
+    public function ajoutProduct(EntityManagerInterface $em, Request $request,int $id): Response
+    {
+
+        $product = new Product();
+
+        $form = $this->createForm(ProductFormType::class,$product);
+        $form->add('Send', SubmitType::class, ['label' => 'ajouter']);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $em->persist($product);
+            $em->flush();
+            $this->addFlash('info', 'ajout réussie');
+            return $this->redirectToRoute('admin_accueil',['id' => $id]);
+        }
+
+        if ($form->isSubmitted())
+            $this->addFlash('info', 'produit incorrect');
+
+        $args = array(
+            'id' => $id,
+            'productForm' => $form->createView(),
+        );
+
+        return $this->render('/view/viewAddProduct.html.twig', $args);
+    }
 }

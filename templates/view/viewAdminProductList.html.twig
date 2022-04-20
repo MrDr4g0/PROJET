@@ -1,0 +1,33 @@
+{% extends 'layout/layoutPage.html.twig' %}
+
+{% block menu %}
+
+    {% set url = path('admin_accueil',{'id' : id}) %}
+    <ul>
+        <li><a href="{{ url }}"> Retour à l'accueil </a></li>
+    </ul>
+
+{% endblock %}
+
+{% block vue %}
+
+    <style>
+        table, th, td {
+            border: 1px solid;
+        }
+    </style>
+
+    <h2>Table des produits : </h2>
+
+    <table>
+        <tr><th>Libellé</th><th>Prix unitaire</th><th>Stock</th></tr>
+        {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.price }}</td>
+                <td>{{ product.stock }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
