@@ -2,13 +2,17 @@
 
 namespace App\Controller\Admin;
 
+use Doctrine\Common\Collections\Collection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\User;
+use App\Entity\ShoppingCart;
+
 /**
  * @Route("/admin", name = "admin")
  */
@@ -60,24 +64,41 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route ("/user-delete/{id}", name = "_delete",requirements = { "id" : "[0-9]\d*"})
+     * @Route ("/user-delete/{id_current}/{id_delete}", name = "_delete")
      */
 
-    public function deleteUser(ManagerRegistry $doctrine,int $id): Response {
+    public function deleteUser(ManagerRegistry $doctrine,int $id_current,int $id_delete): Response {
+
         $em = $doctrine->getManager();
         $userRepository = $em->getRepository('App:User');
-        $user = $userRepository->find($id);
+        //$shoppingCartRepository = $em->getRepository('App:ShoppingCart');
+
+        $user = $userRepository->find($id_delete);
 
         if (is_null($user)){
-            $this->addFlash('info','Film'.$id.' : erreur suppression');
-            throw new NotFoundHttpException('film'. $id . 'inexistant');
+            $this->addFlash('info','User'.$id_delete.' : erreur suppression');
+            throw new NotFoundHttpException('User'. $id_delete . 'inexistant');
         }
 
-        $em->remove($film);
-        $em->flush();
-        $this->addFlash('info','Film'.$id.' supprimé');
+        if ($id_delete == $id_current){
+            $this->addFlash('info','User'.$id_delete.' : erreur suppression');
+            throw new NotFoundHttpException('User'. $id_delete . 'suppression de l\'utilisateur courant');
+        }
 
-        return $this->redirectToRoute('sandbox_doctrine_list');
+        if ($user->getIsSuperAdmin()){
+            $this->addFlash('info','User'.$id_delete.' : erreur suppression');
+            throw new NotFoundHttpException('User'. $id_delete . 'suppression d\'un super administrateur interdit !');
+        }
+
+        //$shoppingCart = $shoppingCartRepository->findBy(array('id_user'=>$user));
+
+        //$em->remove($shoppingCart);
+        //$em->flush();
+        $em->remove($user);
+        $em->flush();
+        $this->addFlash('info','User'.$id_delete.' supprimé');
+
+        return $this->redirectToRoute('admin_user_list',['id' => $id_current]);
     }
 
 

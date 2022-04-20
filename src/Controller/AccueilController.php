@@ -23,7 +23,7 @@ class AccueilController extends AbstractController
         $em = $doctrine->getManager();
         $UserRepository = $em->getRepository('App:User');
         // on met en dur l'id de l'utilisateur recherché
-        $user = $UserRepository->find(0);
+        $user = $UserRepository->find(2);
 
         if (is_null($user))
             return $this->redirectToRoute('nonUser_accueil');
@@ -40,4 +40,30 @@ class AccueilController extends AbstractController
                 'id' => $user->getId(),
             ));
     }
+
+
+    /**
+    * @Route("/ajouterendur",  name = "_ajouterendur")
+    */
+
+    public function ajouterendurAction(ManagerRegistry $doctrine): Response{
+        $em = $doctrine->getManager();
+
+        $user = new User();
+        $user -> setLogin("simon")
+            ->setPassword("nomis")
+            ->setName("Gepavue")
+            ->setFirstName("Simon")
+            ->setBirthDate(date_create("1976/04/01"))
+            ->setIsAdmin(false)
+            ->setIsSuperAdmin(false)
+        ;
+        dump($user);
+        $em->persist($user);
+        $em->flush();
+        dump($user);
+
+        return $this->redirectToRoute('accueil');
+    }
+
 }

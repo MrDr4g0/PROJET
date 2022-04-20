@@ -21,13 +21,11 @@ Pas de modification particulière dans cette vue, on modifie le template parent 
     <h2> Liens Administrateur :</h2>
 
     {% set url = path('admin_user_list',{'id' : id}) %}
-    <p>
-    <a href="{{ url }}"> -> Gestion des utilisateurs <- </a>
-    <br>
-    <a href=""> -> Ajouter un produit dans la base de donnée <- </a>
-    <br>
-    <a href="https://fr.wikipedia.org/wiki/The Truman Show">https://fr.wikipedia.org/wiki/The Truman Show</a>
-    </p>
+    <ul>
+        <li><a href="{{ url }}"> Gestion des utilisateurs </a></li>
+        <li><a href=""> Ajouter un produit dans la base de donnée </a></li>
+        <li><a href="https://fr.wikipedia.org/wiki/The Truman Show"> https://fr.wikipedia.org/wiki/The Truman Show </a></li>
+    </ul>
 {% endblock %}
 
 {% block vue %}
