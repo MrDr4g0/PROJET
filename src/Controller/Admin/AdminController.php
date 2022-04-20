@@ -17,9 +17,9 @@ class AdminController extends AbstractController
 {
 
     /**
-     * @Route("/accueil/{id}", name = "_accueil")
+     * @Route("/accueil/{id}", name = "_accueil",requirements = { "id" : "[0-9]\d*"})
      */
-    public function accueilAdmin(ManagerRegistry $doctrine,$id): Response {
+    public function accueilAdmin(ManagerRegistry $doctrine,int $id): Response {
 
         $em = $doctrine->getManager();
 
@@ -41,10 +41,10 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route ("/user-list/{id}" , name = "_user_list")
+     * @Route ("/user-list/{id}" , name = "_user_list",requirements = { "id" : "[0-9]\d*"})
      */
 
-    public function viewUserList(ManagerRegistry $doctrine,$id): Response {
+    public function viewUserList(ManagerRegistry $doctrine,int $id): Response {
 
         $em = $doctrine->getManager();
         $userRepository = $em->getRepository('App:User');
@@ -57,6 +57,27 @@ class AdminController extends AbstractController
             'users' => $users,
         );
         return $this->render("view/viewAdminUserList.html.twig",$args);
+    }
+
+    /**
+     * @Route ("/user-delete/{id}", name = "_delete",requirements = { "id" : "[0-9]\d*"})
+     */
+
+    public function deleteUser(ManagerRegistry $doctrine,int $id): Response {
+        $em = $doctrine->getManager();
+        $userRepository = $em->getRepository('App:User');
+        $user = $userRepository->find($id);
+
+        if (is_null($user)){
+            $this->addFlash('info','Film'.$id.' : erreur suppression');
+            throw new NotFoundHttpException('film'. $id . 'inexistant');
+        }
+
+        $em->remove($film);
+        $em->flush();
+        $this->addFlash('info','Film'.$id.' supprimé');
+
+        return $this->redirectToRoute('sandbox_doctrine_list');
     }
 
 
