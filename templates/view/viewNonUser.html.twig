@@ -1,11 +1,15 @@
 {% extends 'layout/layoutPage.html.twig' %}
 
-{% block vue %}
-    {{ form_start(nonUserForm) }}
+{% block accueil %}
+    <h1> Bienvenue utilisateur inconnu ! </h1>
+{% endblock %}
 
-    {{ form_errors(nonUserForm) }}
+{% block menu %}
+    {% set urlCreateAccount = path('createAccount') %}
+    {% set urlAuthentification = path('authentification') %}
 
-    {{ form_rest(nonUserForm) }}
-
-    {{ form_end(nonUserForm) }}
+    <ul>
+        <li><a href="{{ urlCreateAccount }}"> Créer un compte </a></li>
+        <li><a href="{{ urlAuthentification }}">S'authentifier</a></li>
+    </ul>
 {% endblock %}

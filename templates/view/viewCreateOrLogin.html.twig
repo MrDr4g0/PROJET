@@ -1,0 +1,11 @@
+{% extends 'layout/layoutPage.html.twig' %}
+
+{% block vue %}
+    {{ form_start(nonUserForm) }}
+
+    {{ form_errors(nonUserForm) }}
+
+    {{ form_rest(nonUserForm) }}
+
+    {{ form_end(nonUserForm) }}
+{% endblock %}

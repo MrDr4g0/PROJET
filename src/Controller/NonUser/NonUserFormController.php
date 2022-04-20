@@ -2,6 +2,7 @@
 
 namespace App\Controller\NonUser;
 
+use App\Form\AuthFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,9 +19,17 @@ use Symfony\Component\Form\FormInterface;
 class NonUserFormController extends AbstractController
 {
     /**
-     * @Route("/nonUser/accueil", name = "nonUser_accueil")
+     * @Route("/accueil_nonUser", name = "nonUserAccueil")
      */
-    public function accueil(EntityManagerInterface $em, Request $request): Response
+    public function accueil(): Response
+    {
+        return $this->render('/view/viewNonUser.html.twig');
+    }
+
+    /**
+     * @Route("/createAccount", name = "createAccount")
+     */
+    public function createAccount(EntityManagerInterface $em, Request $request): Response
     {
         $user = new User();
 
@@ -39,6 +48,33 @@ class NonUserFormController extends AbstractController
         if ($form->isSubmitted())
             $this->addFlash('info', 'Création de compte incorrecte');
         $args = array('nonUserForm' => $form->createView());
-        return $this->render('/view/viewNonUser.html.twig', $args);
+        return $this->render('/view/viewCreateOrLogin.html.twig', $args);
+    }
+
+    /**
+     * @Route("/authentification", name = "authentification")
+     */
+    public function authentification(EntityManagerInterface $em, Request $request): Response
+    {
+        $userRepository = $em->getRepository('App:User');
+
+        $form = $this->createForm(AuthFormType::class);
+        $form->add('Send', SubmitType::class, ['label' => "S'authentifier"]);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted()&& $form->isValid())
+        {
+            $user = $userRepository->findOneBy($form->getData());
+            if(is_null($user))
+                $this->addFlash('info', 'Authentification incorrecte');
+            else
+            {
+                $this->addFlash('info', 'Authentification réussie');
+                return $this->redirectToRoute('accueil');
+            }
+        }
+
+        $args = array('nonUserForm' => $form->createView());
+        return $this->render('/view/viewCreateOrLogin.html.twig', $args);
     }
 }

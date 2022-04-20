@@ -27,7 +27,7 @@ class AccueilController extends AbstractController
         $user = $UserRepository->find(-1);
 
         if (is_null($user))
-            return $this->redirectToRoute('nonUser_accueil');
+            return $this->redirectToRoute('nonUserAccueil');
         else if ($user->getIsAdmin())
             return $this->redirectToRoute('admin_accueil',array(
                 'id' => $user->getId(),
