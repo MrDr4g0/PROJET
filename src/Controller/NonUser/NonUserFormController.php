@@ -20,17 +20,22 @@ class NonUserFormController extends AbstractController
     /**
      * @Route("/nonUser/accueil", name = "nonUser_accueil")
      */
-    public function accueil(Request $request): Response
+    public function accueil(EntityManagerInterface $em, Request $request): Response
     {
         $form = $this->createForm(UserFormType::class);
-        $form->add('Send', SubmitType::class, ['label' => 'Identification']);
+        $form->add('Send', SubmitType::class, ['label' => 'authentification']);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid())
         {
+            $em->flush();
+            $this->addFlash('info', 'authentification réussie');
             return $this->redirectToRoute('accueil');
         }
-        else
-            return new Response ('<body> test </body>');
+
+        if ($form->isSubmitted())
+            $this->addFlash('info', 'authentification incorrecte');
+        $args = array('myform' => $form->createView());
+        return $this->render('/view/viewNonUser.html.twig', $args);
     }
 }
