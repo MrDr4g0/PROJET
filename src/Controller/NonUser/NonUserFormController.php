@@ -22,20 +22,23 @@ class NonUserFormController extends AbstractController
      */
     public function accueil(EntityManagerInterface $em, Request $request): Response
     {
-        $form = $this->createForm(UserFormType::class);
-        $form->add('Send', SubmitType::class, ['label' => 'authentification']);
+        $user = new User();
+
+        $form = $this->createForm(UserFormType::class, $user);
+        $form->add('Send', SubmitType::class, ['label' => 'Créer un compte']);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid())
         {
+            $em->persist($user);
             $em->flush();
-            $this->addFlash('info', 'authentification réussie');
+            $this->addFlash('info', 'Création de compte réussie');
             return $this->redirectToRoute('accueil');
         }
 
         if ($form->isSubmitted())
-            $this->addFlash('info', 'authentification incorrecte');
-        $args = array('myform' => $form->createView());
+            $this->addFlash('info', 'Création de compte incorrecte');
+        $args = array('nonUserForm' => $form->createView());
         return $this->render('/view/viewNonUser.html.twig', $args);
     }
 }
