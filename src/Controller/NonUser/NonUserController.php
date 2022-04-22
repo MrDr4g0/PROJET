@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface; //validator
 use Symfony\Component\Form\FormInterface;
 
 
-class NonUserFormController extends AbstractController
+class NonUserController extends AbstractController
 {
     /**
      * @Route("/accueil_nonUser", name = "nonUserAccueil")

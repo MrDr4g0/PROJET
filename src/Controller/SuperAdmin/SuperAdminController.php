@@ -45,7 +45,7 @@ class SuperAdminController extends AbstractController
     /**
      * @Route ("/ajoutAdmin/{id}" , name="_add_admin",requirements = { "id" : "[0-9]\d*" } )
      */
-    public function ajoutProduct(EntityManagerInterface $em, Request $request,int $id): Response
+    public function ajoutAdmin(EntityManagerInterface $em, Request $request,int $id): Response
     {
 
         $user = new User();
@@ -66,6 +66,41 @@ class SuperAdminController extends AbstractController
 
         if ($form->isSubmitted())
             $this->addFlash('info', 'utilisateur incorrect');
+
+        $args = array(
+            'id' => $id,
+            'userForm' => $form->createView(),
+        );
+
+        return $this->render('/view/viewAddAdmin.html.twig', $args);
+    }
+
+    /**
+     * @Route ("/modifierProfil/{id}" , name="_change_profil",requirements = { "id" : "[0-9]\d*" } )
+     */
+    public function modifierProfil(EntityManagerInterface $em, Request $request,int $id): Response
+    {
+
+        $userRepository = $em->getRepository('App:User');
+        $user = $userRepository->find($id);
+
+        if (is_null($user))
+            throw new NotFoundHttpException('Le profil n\'existe pas');
+
+
+        $form = $this->createForm(UserFormType::class,$user);
+        $form->add('Send', SubmitType::class, ['label' => 'change']);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $em->flush();
+            $this->addFlash('info', 'modification réussie');
+            return $this->redirectToRoute('super_admin_accueil',['id' => $id]);
+        }
+
+        if ($form->isSubmitted())
+            $this->addFlash('info', 'modification incorrect');
 
         $args = array(
             'id' => $id,

@@ -11,25 +11,16 @@ Pas de modification particulière dans cette vue, on modifie le template parent 
 {% endblock %}
 
 {% block menu %}
-    <h2>Panier :</h2>
-    <ul>
-        {% for panier in paniers %}
-            <li>{{ panier }}</li>
-        {% endfor %}
-    </ul>
 
     <h2> Liens Super-Administrateur :</h2>
 
-    {% set urlProfil = path('admin_user_list',{'id' : id}) %}
+    {% set urlProfil = path('super_admin_change_profil',{'id' : id}) %}
     {% set urlAddAdmin = path('super_admin_add_admin',{'id' : id}) %}
 
     <ul>
         <li><a href="{{ urlProfil }}"> Gestion du Profil </a></li>
         <li><a href="{{ urlAddAdmin }}"> Ajouter un Administrateur </a></li>
-        {#
-        <li><a href="{{ urlDeco }}"> Ajouter un produit dans la base de donnée </a></li>
-        #}
-        <li><a href="https://fr.wikipedia.org/wiki/The Truman Show"> https://fr.wikipedia.org/wiki/The Truman Show </a></li>
+        {# <li><a>Deconnexion</a></li> #}
     </ul>
 {% endblock %}
 
