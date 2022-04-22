@@ -24,7 +24,7 @@ class AccueilController extends AbstractController
         $em = $doctrine->getManager();
         $UserRepository = $em->getRepository('App:User');
         // on met en dur l'id de l'utilisateur recherché
-        $user = $UserRepository->find(5);
+        $user = $UserRepository->find(6);
 
         if (is_null($user))
             return $this->redirectToRoute('nonUserAccueil');

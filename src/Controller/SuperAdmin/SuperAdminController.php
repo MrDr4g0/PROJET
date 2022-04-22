@@ -39,7 +39,7 @@ class SuperAdminController extends AbstractController
             'paniers' => $user->getIdShoppingCart(),
         );
 
-        return $this->render('view/viewSuperAdmin.html.twig', $args);
+        return $this->render('view/superAdmin.html.twig', $args);
 
     }
     /**
@@ -72,7 +72,7 @@ class SuperAdminController extends AbstractController
             'userForm' => $form->createView(),
         );
 
-        return $this->render('/view/viewAddAdmin.html.twig', $args);
+        return $this->render('/view/addAdmin.html.twig', $args);
     }
 
     /**
@@ -107,6 +107,6 @@ class SuperAdminController extends AbstractController
             'userForm' => $form->createView(),
         );
 
-        return $this->render('/view/viewAddAdmin.html.twig', $args);
+        return $this->render('/view/modifierProfileAdmin.html.twig', $args);
     }
 }

@@ -1,0 +1,25 @@
+{% extends 'layout/layoutPage.html.twig' %}
+
+{% block title %}{{ parent() }} Formulaire de modification du profile {% endblock %}
+
+
+{% block menu %}
+
+    {% set url = path('user_accueil',{'id' : id}) %}
+    <ul>
+        <li><a href="{{ url }}"> Retour à l'accueil </a></li>
+    </ul>
+
+{% endblock %}
+
+{% block vue %}
+
+    {{ form_start(userForm) }}
+
+    {{ form_errors(userForm) }}
+
+    {{ form_rest(userForm) }}
+
+    {{ form_end(userForm) }}
+
+{% endblock %}

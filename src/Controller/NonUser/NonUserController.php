@@ -23,7 +23,7 @@ class NonUserController extends AbstractController
      */
     public function accueil(): Response
     {
-        return $this->render('/view/viewNonUser.html.twig');
+        return $this->render('/view/nonUser.html.twig');
     }
 
     /**
@@ -48,7 +48,7 @@ class NonUserController extends AbstractController
         if ($form->isSubmitted())
             $this->addFlash('info', 'Création de compte incorrecte');
         $args = array('nonUserForm' => $form->createView());
-        return $this->render('/view/viewCreateOrLogin.html.twig', $args);
+        return $this->render('/view/createOrLogin.html.twig', $args);
     }
 
     /**
@@ -77,6 +77,6 @@ class NonUserController extends AbstractController
         }
 
         $args = array('nonUserForm' => $form->createView());
-        return $this->render('/view/viewCreateOrLogin.html.twig', $args);
+        return $this->render('/view/createOrLogin.html.twig', $args);
     }
 }

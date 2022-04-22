@@ -1,0 +1,29 @@
+{% extends 'layout/layoutPage.html.twig' %}
+
+{% block title %}{{ parent() }} Hub {% endblock %}
+
+{% block accueil %}
+    <h1> Bienvenue {{ firstname }} {{ name }} ! Tu es un {{ type }} </h1>
+{% endblock %}
+
+{% block menu %}
+
+    <h2>Panier :</h2>
+    <ul>
+        {% for panier in paniers %}
+            <li>{{ panier }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2> Liens Utilisateur :</h2>
+
+    {% set urlProfil = path('user_change_profil',{'id' : id}) %}
+    {% set urlProductList = path('user_product_list',{'id' : id}) %}
+
+    <ul>
+        <li><a href="{{ urlProfil }}"> Gestion du Profil </a></li>
+        <li><a href="{{ urlProductList }}">Liste des produits disponibles</a></li>
+        {# <li><a>Deconnexion</a></li> #}
+    </ul>
+{% endblock %}
+

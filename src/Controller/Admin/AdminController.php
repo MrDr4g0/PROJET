@@ -37,7 +37,7 @@ class AdminController extends AbstractController
         $user = $userRepository->find($id);
 
         $args = array(
-            'type' => 'Admin',
+            'type' => 'Administrateur',
             'id' => $user->getId(),
             'name' => $user->getName(),
             'firstname' => $user->getFirstName(),
@@ -45,7 +45,7 @@ class AdminController extends AbstractController
             'paniers' => $user->getIdShoppingCart(),
         );
 
-        return $this->render('view/viewAdmin.html.twig', $args);
+        return $this->render('view/admin.html.twig', $args);
 
     }
 
@@ -65,7 +65,7 @@ class AdminController extends AbstractController
             'id' => $user->getId(),
             'users' => $users,
         );
-        return $this->render("view/viewAdminUserList.html.twig",$args);
+        return $this->render("view/adminUserList.html.twig",$args);
     }
 
     /**
@@ -123,7 +123,7 @@ class AdminController extends AbstractController
             'id' => $user->getId(),
             'products' => $products,
         );
-        return $this->render("view/viewAdminProductList.html.twig",$args);
+        return $this->render("view/adminProductList.html.twig",$args);
     }
 
     /**
@@ -154,6 +154,6 @@ class AdminController extends AbstractController
             'productForm' => $form->createView(),
         );
 
-        return $this->render('/view/viewAddProduct.html.twig', $args);
+        return $this->render('/view/addProduct.html.twig', $args);
     }
 }
