@@ -83,7 +83,7 @@ class UserController extends AbstractController
         {
             $em->flush();
             $this->addFlash('info', 'modification réussie');
-            return $this->redirectToRoute('super_admin_accueil',['id' => $id]);
+            return $this->redirectToRoute('user_accueil',['id' => $id]);
         }
 
         if ($form->isSubmitted())

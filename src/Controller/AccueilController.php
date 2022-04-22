@@ -3,8 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Form\ServiceType;
+use App\Form\UserFormType;
+use App\Service\InverseWordService;
 use ContainerAjxZwdo\getConsole_ErrorListenerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -24,7 +29,7 @@ class AccueilController extends AbstractController
         $em = $doctrine->getManager();
         $UserRepository = $em->getRepository('App:User');
         // on met en dur l'id de l'utilisateur recherché
-        $user = $UserRepository->find(6);
+        $user = $UserRepository->find(2);
 
         if (is_null($user))
             return $this->redirectToRoute('nonUserAccueil');
@@ -44,7 +49,7 @@ class AccueilController extends AbstractController
 
 
     /**
-    * @Route("/ajouterendur",  name = "_ajouterendur")
+    * @Route("/ajouterendur",  name = "ajouterendur")
     */
 
     public function ajouterendurAction(ManagerRegistry $doctrine): Response{
@@ -68,7 +73,7 @@ class AccueilController extends AbstractController
     }
 
     /**
-     * @Route("/ajouterendurProduct",  name = "_ajouterendur")
+     * @Route("/ajouterendurProduct",  name = "ajouterendur")
      */
 
     public function ajouterendurProduct(ManagerRegistry $doctrine): Response{
@@ -85,6 +90,45 @@ class AccueilController extends AbstractController
         dump($product);
 
         return $this->redirectToRoute('accueil');
+    }
+
+    /**
+     * @Route("/service" , name="service")
+     */
+    public function serviceWord(Request $request,InverseWordService $inv){
+
+        $form = $this->createForm(ServiceType::class);
+        $form->add('Send', SubmitType::class, ['label' => 'valider']);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $res = $inv->inverseWord($form->get('word')->getData());
+            $this->addFlash('info', 'modification réussie');
+            return $this->redirectToRoute('vue',['word' => $res]);
+        }
+
+        if ($form->isSubmitted())
+            $this->addFlash('info', 'utilisateur incorrect');
+
+        $args = array(
+            'serviceForm' => $form->createView(),
+        );
+
+        return $this->render('/view/service.html.twig', $args);
+    }
+
+    /**
+     * @Route ("/vue/{word}",name="vue")
+     */
+    public function viewAction(string $word) : Response {
+
+        $args = array(
+            'word' => $word,
+        );
+
+        return $this->render("view/serviceResult.html.twig",$args);
+
     }
 
 }
