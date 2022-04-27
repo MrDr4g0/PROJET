@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Product;
 use App\Form\ProductFormType;
+use App\Form\ShoppingType;
 use App\Form\UserFormType;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -36,13 +37,17 @@ class AdminController extends AbstractController
 
         $user = $userRepository->find($id);
 
+        $shoppingRepository =$em->getRepository('App:ShoppingCart');
+
+        $shoppingCart = $shoppingRepository->findBy(array('id_user' => $id));
+
         $args = array(
             'type' => 'Administrateur',
             'id' => $user->getId(),
             'name' => $user->getName(),
             'firstname' => $user->getFirstName(),
             'birth_date' => $user->getBirthDate(),
-            'paniers' => $user->getIdShoppingCart(),
+            'shopCarts' => $shoppingCart,
         );
 
         return $this->render('view/admin.html.twig', $args);
@@ -110,7 +115,7 @@ class AdminController extends AbstractController
      * @Route ("/productList/{id}" , name = "_product_list",requirements = { "id" : "[0-9]\d*"})
      */
 
-    public function viewProductList(ManagerRegistry $doctrine,int $id): Response {
+    public function viewProductList(ManagerRegistry $doctrine,Request $request,int $id): Response {
 
         $em = $doctrine->getManager();
         $productRepository = $em->getRepository('App:Product');
@@ -119,11 +124,33 @@ class AdminController extends AbstractController
         $user = $userRepository->find($id);
 
         $products = $productRepository->findAll();
+
+        $shoppingCart = new ShoppingCart();
+
+        $form = $this->createForm(ShoppingType::class,$shoppingCart);
+        $form->handleRequest($request);
+
+        $form->get('id_user')->setData($id);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $em->persist($shoppingCart);
+            $em->flush();
+            $this->addFlash('info', 'ajout réussie');
+            return $this->redirectToRoute('admin_accueil',['id' => $id]);
+        }
+
+        if ($form->isSubmitted())
+            $this->addFlash('info', 'produit incorrect');
+
         $args = array(
-            'id' => $user->getId(),
+            'id' => $id,
             'products' => $products,
+            'shoppingForm' => $form->createView(),
         );
-        return $this->render("view/adminProductList.html.twig",$args);
+
+        return $this->render('/view/adminProductList.html.twig', $args);
+
     }
 
     /**
@@ -156,4 +183,33 @@ class AdminController extends AbstractController
 
         return $this->render('/view/addProduct.html.twig', $args);
     }
+
+    /**
+     * @Route("/shoppingCart/{id}", name"_shopping_cart",requirements = { "id" : "[0-9]\d*" })
+     */
+
+    public function viewShoppingCart(ManagerRegistry $doctrine,int $id): Response {
+
+        $em = $doctrine->getManager();
+
+        $userRepository = $em->getRepository('App:User');
+        $user = $userRepository->find($id);
+
+        $shoppingRepository =$em->getRepository('App:ShoppingCart');
+        $shoppingCart = $shoppingRepository->findBy(array('id_user' => $id));
+
+        $args = array(
+            'id' => $user->getId(),
+            'shopCarts' => $shoppingCart,
+        );
+        return $this->render('/view/adminShoppingCart.html.twig',$args);
+    }
+
+
+    /**
+     * @Route("/deleteItem/{id_current}/{item}", name="_delete_item", requirements = { "id" : "[0-9]\d*" } )
+     */
+
+
+
 }

@@ -19,10 +19,11 @@
 
     {% set urlProfil = path('user_change_profil',{'id' : id}) %}
     {% set urlProductList = path('user_product_list',{'id' : id}) %}
-
+    {% set urlService = path('service') %}
     <ul>
         <li><a href="{{ urlProfil }}"> Gestion du Profil </a></li>
         <li><a href="{{ urlProductList }}">Liste des produits disponibles</a></li>
+        <li><a href="{{ urlService }}"> Aller au service </a></li>
         {# <li><a>Deconnexion</a></li> #}
     </ul>
 {% endblock %}

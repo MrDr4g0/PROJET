@@ -11,22 +11,36 @@ Pas de modification particulière dans cette vue, on modifie le template parent 
 {% endblock %}
 
 {% block menu %}
-    <h2>Panier :</h2>
-    <ul>
-        {% for panier in paniers %}
-            <li>{{ panier }}</li>
+    <h2> Résumé du Panier :</h2>
+    <style>
+        table, th, td {
+            border: 1px solid;
+            text-align: center;
+        }
+    </style>
+    <table>
+        <tr><th>Nom du produit </th><th>Quantité</th><th>Prix unitaire</th></tr>
+        {% for shopCart in shopCarts %}
+            <tr>
+                <td>{{ shopCart.idProduct.name }}</td>
+                <td>{{ shopCart.nbProduct }}</td>
+                <td>{{ shopCart.idProduct.price }}</td>
+
+            </tr>
         {% endfor %}
-    </ul>
-
+    </table>
     <h2> Liens Administrateur :</h2>
-
+    {% set urlShoppingCart = path('admin_shopping_cart',{'id' : id}) %}
     {% set urlUserList = path('admin_user_list',{'id' : id}) %}
     {% set urlProductList = path('admin_product_list',{'id' : id}) %}
     {% set urlAddProduct = path('admin_add_product',{'id' : id}) %}
+    {% set urlService = path('service') %}
     <ul>
+        <li><a href="{{ urlShoppingCart }}">Gestion du panier</a></li>
         <li><a href="{{ urlUserList }}"> Gestion des utilisateurs </a></li>
         <li><a href="{{ urlProductList }}">Liste des produits disponibles</a></li>
         <li><a href="{{ urlAddProduct }}"> Ajouter un produit dans la base de donnée </a></li>
+        <li><a href="{{ urlService }}"> Aller au service </a></li>
         <li><a href="https://fr.wikipedia.org/wiki/The Truman Show"> https://fr.wikipedia.org/wiki/The Truman Show </a></li>
     </ul>
 {% endblock %}

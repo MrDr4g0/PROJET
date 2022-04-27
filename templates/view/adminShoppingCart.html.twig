@@ -1,0 +1,36 @@
+{% extends 'layout/layoutPage.html.twig' %}
+
+{% block menu %}
+
+    {% set url = path('admin_accueil',{'id' : id}) %}
+    <ul>
+        <li><a href="{{ url }}"> Retour à l'accueil </a></li>
+    </ul>
+
+{% endblock %}
+
+{% block vue %}
+
+    <style>
+        table, th, td {
+            border: 1px solid;
+            text-align: center;
+        }
+    </style>
+
+    <h2> Panier : </h2>
+
+    <table>
+        <tr><th>Nom du produit </th><th>Quantité</th><th>Prix unitaire</th><th>Supprimer</th></tr>
+        {% for shopCart in shopCarts %}
+            <tr>
+                {% set urlDelete = path('sandbox_doctrine_delete',{'id' : film.id}) %}
+                <td>{{ shopCart.name }}</td>
+                <td>{{ shopCart.price }}</td>
+                <td>{{ shopCart.stock }}</td>
+                <td><a href="{{ urlDelete }}">supprimer</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}

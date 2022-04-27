@@ -16,10 +16,11 @@ Pas de modification particulière dans cette vue, on modifie le template parent 
 
     {% set urlProfil = path('super_admin_change_profil',{'id' : id}) %}
     {% set urlAddAdmin = path('super_admin_add_admin',{'id' : id}) %}
-
+    {% set urlService = path('service') %}
     <ul>
         <li><a href="{{ urlProfil }}"> Gestion du Profil </a></li>
         <li><a href="{{ urlAddAdmin }}"> Ajouter un Administrateur </a></li>
+        <li><a href="{{ urlService }}"> Aller au service </a></li>
         {# <li><a>Deconnexion</a></li> #}
     </ul>
 {% endblock %}

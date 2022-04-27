@@ -21,14 +21,20 @@
     <h2>Table des produits : </h2>
 
     <table>
-        <tr><th>Libellé</th><th>Prix unitaire</th><th>Stock</th></tr>
+        <tr><th>Libellé</th><th>Prix unitaire</th><th>Stock</th><th></th></tr>
+        {{ form_start(shoppingForm) }}
         {% for product in products %}
             <tr>
                 <td>{{ product.name }}</td>
                 <td>{{ product.price }}</td>
                 <td>{{ product.stock }}</td>
+                <td>{{ form_row(shoppingForm.nb_product) }}</td>
             </tr>
         {% endfor %}
-    </table>
+        {{ form_errors(shoppingForm) }}
+        {{ form_rest(shoppingForm) }}
 
+        {{ form_end(shoppingForm) }}
+    </table>
+    <button type="submit">Ajouter</button>
 {% endblock %}

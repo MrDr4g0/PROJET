@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Entity\ShoppingCart;
 use App\Form\ServiceType;
 use App\Form\UserFormType;
 use App\Service\InverseWordService;
@@ -80,9 +81,9 @@ class AccueilController extends AbstractController
         $em = $doctrine->getManager();
 
         $product = new Product();
-        $product ->setName("Cahier - A4 - Petits Carreaux")
-            ->setPrice(5.50)
-            ->setStock(52)
+        $product ->setName("Crayon Rouge")
+            ->setPrice(1.50)
+            ->setStock(1863)
         ;
         dump($product);
         $em->persist($product);
@@ -91,6 +92,34 @@ class AccueilController extends AbstractController
 
         return $this->redirectToRoute('accueil');
     }
+
+    /**
+     * @Route("/ajoutShoppingCart", name="ajouterendurSC")
+     */
+
+    public function ajouterendurShopping(ManagerRegistry $doctrine): Response{
+        $em = $doctrine->getManager();
+        $UserRepository = $em->getRepository('App:User');
+        $ProductRepository = $em->getRepository('App:Product');
+
+        $user = $UserRepository->find(2);
+        $product = $ProductRepository->find(1);
+
+        $shoppingCart = new ShoppingCart();
+        $shoppingCart ->setIdUser($user)
+            ->setIdProduct($product)
+            ->setNbProduct(3)
+        ;
+        dump($shoppingCart);
+        $em->persist($shoppingCart);
+        $em->flush();
+        dump($shoppingCart);
+
+        return $this->redirectToRoute('accueil');
+    }
+
+
+
 
     /**
      * @Route("/service" , name="service")
