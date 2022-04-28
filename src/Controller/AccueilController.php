@@ -30,7 +30,7 @@ class AccueilController extends AbstractController
         $em = $doctrine->getManager();
         $UserRepository = $em->getRepository('App:User');
         // on met en dur l'id de l'utilisateur recherché
-        $user = $UserRepository->find(2);
+        $user = $UserRepository->find(6);
 
         if (is_null($user))
             return $this->redirectToRoute('nonUserAccueil');
@@ -102,13 +102,13 @@ class AccueilController extends AbstractController
         $UserRepository = $em->getRepository('App:User');
         $ProductRepository = $em->getRepository('App:Product');
 
-        $user = $UserRepository->find(2);
+        $user = $UserRepository->find(6);
         $product = $ProductRepository->find(1);
 
         $shoppingCart = new ShoppingCart();
         $shoppingCart ->setIdUser($user)
             ->setIdProduct($product)
-            ->setNbProduct(3)
+            ->setNbProduct(15)
         ;
         dump($shoppingCart);
         $em->persist($shoppingCart);

@@ -29,13 +29,17 @@ class UserController extends AbstractController
 
         $user = $userRepository->find($id);
 
+        $shoppingRepository =$em->getRepository('App:ShoppingCart');
+
+        $shoppingCart = $shoppingRepository->findBy(array('id_user' => $id));
+
         $args = array(
             'type' => 'Utilisateur',
             'id' => $user->getId(),
             'name' => $user->getName(),
             'firstname' => $user->getFirstName(),
             'birth_date' => $user->getBirthDate(),
-            'paniers' => $user->getIdShoppingCart(),
+            'shopCarts' => $shoppingCart,
         );
 
         return $this->render('view/user.html.twig', $args);
@@ -96,4 +100,115 @@ class UserController extends AbstractController
 
         return $this->render('/view/modifierProfileUser.html.twig', $args);
     }
+
+    /**
+     * @Route("/shoppingCart/{id}", name="_shopping_cart",requirements = { "id" : "[0-9]\d*" })
+     */
+
+    public function viewShoppingCart(ManagerRegistry $doctrine,int $id): Response {
+
+        $em = $doctrine->getManager();
+
+        $userRepository = $em->getRepository('App:User');
+        $user = $userRepository->find($id);
+
+        $shoppingRepository = $em->getRepository('App:ShoppingCart');
+        $shoppingCart = $shoppingRepository->findBy(array('id_user' => $user));
+
+        $args = array(
+            'id' => $user->getId(),
+            'shopCarts' => $shoppingCart,
+        );
+        return $this->render('/view/userShoppingCart.html.twig',$args);
+    }
+
+    /**
+     * @Route("/deleteItem/{id_current}/{id_shop}", name="_delete_item", requirements = { "id" : "[0-9]\d*" } )
+     */
+
+    public function deleteItem(ManagerRegistry $doctrine,int $id_current,int $id_shop): Response {
+
+        $em = $doctrine->getManager();
+
+        $shoppingCartRepository = $em->getRepository('App:ShoppingCart');
+        $shopCart = $shoppingCartRepository->find($id_shop);
+
+        $ProductRepository = $em->getRepository('App:Product');
+
+        $product = $ProductRepository->find($shopCart->getIdProduct());
+
+
+        if (is_null($product)){
+            $this->addFlash('info','Item : '.$product->getName().' : erreur suppression');
+            throw new NotFoundHttpException('Item : '. $product->getName() . 'inexistant');
+        }
+
+        $product = $product->setStock( $product->getStock() + $shopCart->getNbProduct() );
+
+        $em->remove($shopCart);
+        $em->flush();
+        $this->addFlash('info','Item : '. $product->getName() .' supprimé');
+
+        return $this->redirectToRoute('user_shopping_cart',['id' => $id_current]);
+    }
+
+    /**
+     * @Route("/commanderPanier/{id_current}", name="_commander" )
+     */
+
+    public function commandItems(ManagerRegistry $doctrine,int $id_current ): Response {
+
+        $em = $doctrine->getManager();
+
+        $shoppingCartRepository = $em->getRepository('App:ShoppingCart');
+
+        $userShoppingCart = $shoppingCartRepository->findBy(array('id_user' => $id_current));
+
+        if (is_null($userShoppingCart)){
+            $this->addFlash('info','Commande : '.$id_current.' : erreur suppression');
+            throw new NotFoundHttpException('Commande : '. $id_current. 'inexistant');
+        }
+
+        foreach ($userShoppingCart as $usc) {
+            $em->remove($usc);
+        }
+        $em->flush();
+        $this->addFlash('info','Commande : '. $id_current .' supprimé');
+
+        return $this->redirectToRoute('user_shopping_cart',['id' => $id_current]);
+    }
+
+    /**
+     * @Route("/viderPanier/{id_current}", name="_vider" )
+     */
+
+    public function videItems(ManagerRegistry $doctrine,int $id_current ): Response {
+
+        $em = $doctrine->getManager();
+
+        $shoppingCartRepository = $em->getRepository('App:ShoppingCart');
+        $ProductRepository = $em->getRepository('App:Product');
+
+        $userShoppingCart = $shoppingCartRepository->findBy(array('id_user' => $id_current));
+
+        if (is_null($userShoppingCart)){
+            $this->addFlash('info','Commande : '.$id_current.' : erreur suppression');
+            throw new NotFoundHttpException('Commande : '. $id_current. 'inexistant');
+        }
+
+        foreach ($userShoppingCart as $usc) {
+
+            $product = $ProductRepository->find($usc->getIdProduct());
+
+            $product = $product->setStock( $product->getStock() + $usc->getNbProduct() );
+
+            $em->remove($usc);
+
+        }
+        $em->flush();
+        $this->addFlash('info','Commande : '. $id_current .' supprimé');
+
+        return $this->redirectToRoute('user_shopping_cart',['id' => $id_current]);
+    }
+
 }

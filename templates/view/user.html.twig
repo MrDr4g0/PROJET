@@ -9,18 +9,31 @@
 {% block menu %}
 
     <h2>Panier :</h2>
-    <ul>
-        {% for panier in paniers %}
-            <li>{{ panier }}</li>
+    <style>
+        table, th, td {
+            border: 1px solid;
+            text-align: center;
+        }
+    </style>
+    <table>
+        <tr><th>Nom du produit </th><th>Quantité</th><th>Prix unitaire</th></tr>
+        {% for shopCart in shopCarts %}
+            <tr>
+                <td>{{ shopCart.idProduct.name }}</td>
+                <td>{{ shopCart.nbProduct }}</td>
+                <td>{{ shopCart.idProduct.price }}</td>
+
+            </tr>
         {% endfor %}
-    </ul>
+    </table>
 
     <h2> Liens Utilisateur :</h2>
-
+    {% set urlShoppingCart = path('user_shopping_cart',{'id' : id}) %}
     {% set urlProfil = path('user_change_profil',{'id' : id}) %}
     {% set urlProductList = path('user_product_list',{'id' : id}) %}
     {% set urlService = path('service') %}
     <ul>
+        <li><a href="{{ urlShoppingCart }}">Gestion du panier</a></li>
         <li><a href="{{ urlProfil }}"> Gestion du Profil </a></li>
         <li><a href="{{ urlProductList }}">Liste des produits disponibles</a></li>
         <li><a href="{{ urlService }}"> Aller au service </a></li>

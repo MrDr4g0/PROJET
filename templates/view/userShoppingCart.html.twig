@@ -2,7 +2,7 @@
 
 {% block menu %}
 
-    {% set url = path('admin_accueil',{'id' : id}) %}
+    {% set url = path('user_accueil',{'id' : id}) %}
     <ul>
         <li><a href="{{ url }}"> Retour à l'accueil </a></li>
     </ul>
@@ -25,7 +25,7 @@
         {% set totalprice = 0 %}
         {% for shopCart in shopCarts %}
             <tr>
-                {% set urlDelete = path('admin_delete_item',{'id_current' : id ,'id_shop' : shopCart.id}) %}
+                {% set urlDelete = path('user_delete_item',{'id_current' : id ,'id_shop' : shopCart.id}) %}
                 <td>{{ shopCart.idProduct.name }}</td>
                 <td>{{ shopCart.nbProduct }}</td>
                 <td>{{ shopCart.idProduct.price }}</td>
@@ -36,9 +36,9 @@
     </table>
     <h3>Prix total de la commande : {{ totalprice }}  </h3>
     <ul>
-        {% set urlCommande = path('admin_commander',{'id_current' : id }) %}
+        {% set urlCommande = path('user_commander',{'id_current' : id }) %}
         <li><a href="{{ urlCommande }}" >Commander</a></li>
-        {% set urlVider = path('admin_vider',{'id_current' : id }) %}
+        {% set urlVider = path('user_vider',{'id_current' : id }) %}
         <li><a href="{{ urlVider }}">Vider</a></li>
     </ul>
 
