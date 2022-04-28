@@ -7,13 +7,12 @@ use App\Entity\ShoppingCart;
 use App\Form\ServiceType;
 use App\Form\UserFormType;
 use App\Service\InverseWordService;
-use ContainerAjxZwdo\getConsole_ErrorListenerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use ContainerAjxZwdo\getConsole_ErrorListenerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use App\Entity\User;
@@ -30,7 +29,7 @@ class AccueilController extends AbstractController
         $em = $doctrine->getManager();
         $UserRepository = $em->getRepository('App:User');
         // on met en dur l'id de l'utilisateur recherché
-        $user = $UserRepository->find(6);
+        $user = $UserRepository->find(2);
 
         if (is_null($user))
             return $this->redirectToRoute('nonUserAccueil');
@@ -48,11 +47,11 @@ class AccueilController extends AbstractController
             ));
     }
 
-
+/*
     /**
     * @Route("/ajouterendur",  name = "ajouterendur")
     */
-
+/*
     public function ajouterendurAction(ManagerRegistry $doctrine): Response{
         $em = $doctrine->getManager();
 
@@ -76,7 +75,7 @@ class AccueilController extends AbstractController
     /**
      * @Route("/ajouterendurProduct",  name = "ajouterendur")
      */
-
+/*
     public function ajouterendurProduct(ManagerRegistry $doctrine): Response{
         $em = $doctrine->getManager();
 
@@ -96,7 +95,7 @@ class AccueilController extends AbstractController
     /**
      * @Route("/ajoutShoppingCart", name="ajouterendurSC")
      */
-
+/*
     public function ajouterendurShopping(ManagerRegistry $doctrine): Response{
         $em = $doctrine->getManager();
         $UserRepository = $em->getRepository('App:User');
@@ -119,11 +118,12 @@ class AccueilController extends AbstractController
     }
 
 
-
+*/
 
     /**
      * @Route("/service" , name="service")
      */
+
     public function serviceWord(Request $request,InverseWordService $inv){
 
         $form = $this->createForm(ServiceType::class);

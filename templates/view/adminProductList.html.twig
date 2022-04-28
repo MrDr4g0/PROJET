@@ -22,19 +22,23 @@
 
     <table>
         <tr><th>Libellé</th><th>Prix unitaire</th><th>Stock</th><th></th></tr>
-        {{ form_start(shoppingForm) }}
+
         {% for product in products %}
+            {{ form_start(shoppingForm) }}
             <tr>
                 <td>{{ product.name }}</td>
                 <td>{{ product.price }}</td>
                 <td>{{ product.stock }}</td>
-                <td>{{ form_row(shoppingForm.nb_product) }}</td>
+                <td>
+                    {{ form_start(shoppingForm) }}
+                    {{ form_errors(shoppingForm) }}
+                    {{ form_rest(shoppingForm) }}
+                    {{ form_end(shoppingForm) }}
+                </td>
             </tr>
-        {% endfor %}
-        {{ form_errors(shoppingForm) }}
-        {{ form_rest(shoppingForm) }}
 
-        {{ form_end(shoppingForm) }}
+        {% endfor %}
+
     </table>
     <button type="submit">Ajouter</button>
 {% endblock %}

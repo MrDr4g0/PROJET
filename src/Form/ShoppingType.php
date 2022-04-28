@@ -3,7 +3,10 @@
 namespace App\Form;
 
 use App\Entity\ShoppingCart;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -14,7 +17,7 @@ class ShoppingType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nb_product',ChoiceType::class,[
+            ->add('nb_product',IntegerType::class,[
                 'label' => 'Nombres de produit : ',
             ])
             ->add('id_user',HiddenType::class)
